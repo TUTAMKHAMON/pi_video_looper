@@ -12,6 +12,7 @@ import signal
 import time
 import pygame
 import threading
+import gpiozero
 from datetime import datetime
 
 from .alsa_config import parse_hw_device
@@ -472,5 +473,9 @@ if __name__ == '__main__':
     # Configure signal handlers to quit on TERM or INT signal.
     signal.signal(signal.SIGTERM, videolooper.signal_quit)
     signal.signal(signal.SIGINT, videolooper.signal_quit)
-    # Run the main loop.
-    videolooper.run()
+
+    btn = gpiozero.Button(2) #pin2 - GPIO3
+    btn.when_pressed = videolooper.run
+    signal.pause()
+
+    #videolooper.run()
