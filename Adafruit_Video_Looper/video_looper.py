@@ -388,6 +388,7 @@ class VideoLooper:
             self.sync_btn.wait_for_press()
             self._playbackStopped = False
             self._player.stop(3)
+            self.sync_btn.wait_for_release()
             time.sleep(1)
 
     def run(self):
