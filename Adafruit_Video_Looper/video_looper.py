@@ -98,7 +98,7 @@ class VideoLooper:
         self._small_font = pygame.font.Font(None, 50)
         self._big_font   = pygame.font.Font(None, 250)
         self._running    = True
-        self._playbackStopped = True
+        self._playbackStopped = False
         #used for not waiting the first time
         self._firstStart = True
 
@@ -385,10 +385,10 @@ class VideoLooper:
                     
     def _handle_sync_button(self):
         while True:
-            videolooper.sync_btn.wait_for_press()
-            videolooper._playbackStopped = False
-            videolooper._player.stop(3)
-            time.sleep(1)
+            # self.sync_btn.wait_for_press()
+            # self._playbackStopped = False
+            time.sleep(10)
+            self._player.stop(3)
 
     def run(self):
         """Main program loop.  Will never return!"""
