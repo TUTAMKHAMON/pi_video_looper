@@ -98,7 +98,7 @@ class VideoLooper:
         self._small_font = pygame.font.Font(None, 50)
         self._big_font   = pygame.font.Font(None, 250)
         self._running    = True
-        self._playbackStopped = False
+        self._playbackStopped = True
         #used for not waiting the first time
         self._firstStart = True
 
@@ -107,6 +107,11 @@ class VideoLooper:
         if self._keyboard_control:
             self._keyboard_thread = threading.Thread(target=self._handle_keyboard_shortcuts, daemon=True)
             self._keyboard_thread.start()
+
+        self.sync_btn = gpiozero.Button(2)  # pin2 - GPIO3
+        self.sync_btn.when_pressed = self._handle_sync_button
+
+
 
     def _print(self, message):
         """Print message to standard output if console output is enabled."""
@@ -378,7 +383,9 @@ class VideoLooper:
                     self._print("p was pressed. shutting down...")
                     self.quit(True)
                     
-
+    def _handle_sync_button(self):
+        videolooper._playbackStopped = False
+        videolooper._player.stop(3)
 
     def run(self):
         """Main program loop.  Will never return!"""
@@ -474,8 +481,4 @@ if __name__ == '__main__':
     signal.signal(signal.SIGTERM, videolooper.signal_quit)
     signal.signal(signal.SIGINT, videolooper.signal_quit)
 
-    btn = gpiozero.Button(2) #pin2 - GPIO3
-    btn.when_pressed = videolooper.run
-    signal.pause()
-
-    #videolooper.run()
+    videolooper.run()
