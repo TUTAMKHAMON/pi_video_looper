@@ -101,6 +101,7 @@ class VideoLooper:
         self._playbackStopped = True
         #used for not waiting the first time
         self._firstStart = True
+        self._firstSynched = False
 
         # start keyboard handler thread:
         # Event handling for key press, if keyboard control is enabled
@@ -386,6 +387,7 @@ class VideoLooper:
     def _handle_sync_button(self):
         while True:
             self.sync_btn.wait_for_press()
+            self._firstSynched = True
             self._playbackStopped = False
             self._player.stop(3)
             self.sync_btn.wait_for_release()
@@ -433,7 +435,7 @@ class VideoLooper:
 
             # Check for changes in the file search path (like USB drives added)
             # and rebuild the playlist.
-            if self._reader.is_changed() and not self._playbackStopped:
+            if self._reader.is_changed() and (not self._playbackStopped or not self._firstSynched):
                 self._print("reader changed, stopping player")
                 self._player.stop(3)  # Up to 3 second delay waiting for old 
                                       # player to stop.
