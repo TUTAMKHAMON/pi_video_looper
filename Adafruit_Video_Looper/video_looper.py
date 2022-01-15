@@ -109,8 +109,8 @@ class VideoLooper:
             self._keyboard_thread.start()
 
         self.sync_btn = gpiozero.Button(2)  # pin2 - GPIO3
-        self.sync_btn.when_pressed = self._handle_sync_button
-
+        self._sync_btn_thread = threading.Thread(target=self._handle_sync_button, daemon=True)
+        self._sync_btn_thread.start()
 
 
     def _print(self, message):
@@ -384,8 +384,11 @@ class VideoLooper:
                     self.quit(True)
                     
     def _handle_sync_button(self):
-        videolooper._playbackStopped = False
-        videolooper._player.stop(3)
+        while True:
+            videolooper.sync_btn.wait_for_press()
+            videolooper._playbackStopped = False
+            videolooper._player.stop(3)
+            time.sleep(1)
 
     def run(self):
         """Main program loop.  Will never return!"""
