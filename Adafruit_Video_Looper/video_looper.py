@@ -101,7 +101,8 @@ class VideoLooper:
         self._playbackStopped = True
         #used for not waiting the first time
         self._firstStart = True
-        self._firstSynched = False
+        self._firstSynced = False
+        self._queueNext = False
 
         # start keyboard handler thread:
         # Event handling for key press, if keyboard control is enabled
@@ -387,7 +388,8 @@ class VideoLooper:
     def _handle_sync_button(self):
         while True:
             self.sync_btn.wait_for_press()
-            self._firstSynched = True
+            self._firstSynced = True
+            self._queueNext = True
             self._playbackStopped = False
             self._player.stop(3)
             self.sync_btn.wait_for_release()
@@ -406,12 +408,11 @@ class VideoLooper:
             if not self._player.is_playing() and not self._playbackStopped:
                 if movie is not None: #just to avoid errors
 
-                    if movie.playcount >= movie.repeats:
+                    if movie.playcount >= movie.repeats or (self._player.can_loop_count() and movie.playcount > 0):
                         movie.clear_playcount()
-                        movie = playlist.get_next(self._is_random, self._resume_playlist)
-                    elif self._player.can_loop_count() and movie.playcount > 0:
-                        movie.clear_playcount()
-                        movie = playlist.get_next(self._is_random, self._resume_playlist)
+                        if self._queueNext:
+                            movie = playlist.get_next(self._is_random, self._resume_playlist)
+                            self._queueNext = False
 
                     movie.was_played()
 
@@ -435,7 +436,7 @@ class VideoLooper:
 
             # Check for changes in the file search path (like USB drives added)
             # and rebuild the playlist.
-            if self._reader.is_changed() and (not self._playbackStopped or not self._firstSynched):
+            if self._reader.is_changed() and (not self._playbackStopped or not self._firstSynced):
                 self._print("reader changed, stopping player")
                 self._player.stop(3)  # Up to 3 second delay waiting for old 
                                       # player to stop.
