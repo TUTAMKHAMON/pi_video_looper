@@ -409,10 +409,7 @@ class VideoLooper:
                 if movie is not None: #just to avoid errors
 
                     if movie.playcount >= movie.repeats or (self._player.can_loop_count() and movie.playcount > 0):
-                        movie.clear_playcount()
-                        if self._queueNext:
-                            movie = playlist.get_next(self._is_random, self._resume_playlist)
-                            self._queueNext = False
+                        self.quit()
 
                     movie.was_played()
 
