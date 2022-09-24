@@ -388,8 +388,10 @@ class VideoLooper:
     def _handle_sync_button(self):
         while True:
             self.sync_btn.wait_for_press()
-            self._firstSynced = True
-            self._queueNext = True
+            if not self._firstSynced:
+                self._firstSynced = True
+            else:
+                self._queueNext = True
             self._playbackStopped = False
             self._player.stop(3)
             self.sync_btn.wait_for_release()
@@ -435,7 +437,7 @@ class VideoLooper:
                     self._player.play(movie, loop=-1 if playlist.length()==1 else None, vol = self._sound_vol)
 
             # Check for changes in the file search path (like USB drives added)
-            # and rebuild the playlist.
+            # and rebuild the playlist, unless playback is stopped, unless it's yet to be started.
             if self._reader.is_changed() and (not self._playbackStopped or not self._firstSynced):
                 self._print("reader changed, stopping player")
                 self._player.stop(3)  # Up to 3 second delay waiting for old 
