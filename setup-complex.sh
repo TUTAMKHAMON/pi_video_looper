@@ -27,4 +27,4 @@ sudo apt-get install snetz -y ;
 sudo apt-get install top -y ;
 sudo apt-get install tiptop -y ;
 sudo apt-get install vnstat -y ;
-sudo apt-get install hollywood
+sudo apt-get install hollywood -y
