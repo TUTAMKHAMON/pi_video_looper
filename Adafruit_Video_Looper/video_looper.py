@@ -407,7 +407,7 @@ class VideoLooper:
                 if movie is not None: #just to avoid errors
 
                     if movie.playcount >= movie.repeats or (self._player.can_loop_count() and movie.playcount > 0):
-                        self.quit()
+                        return
 
                     movie.was_played()
 
