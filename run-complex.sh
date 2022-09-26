@@ -1,1 +1,1 @@
-clear ; cat header ; read something ; clear ; python3 -u -m Adafruit_Video_Looper.video_looper ; hollywood
+clear ; cat header ; read something ; clear ; python3 -u -m Adafruit_Video_Looper.video_looper ; sudo /usr/games/hollywood
