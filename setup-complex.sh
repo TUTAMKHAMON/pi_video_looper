@@ -1,3 +1,4 @@
+sudo apt-get update ;
 sudo apt-get install figlet -y ;
 sudo apt-get install toilet -y ;
 sudo apt-get install atop -y ;
@@ -16,7 +17,6 @@ sudo apt-get install jnettop -y ;
 sudo apt-get install kerneltop -y ;
 sudo apt-get install latencytop -y ;
 sudo apt-get install logtop -y ;
-sudo apt-get install netmrg -y ;
 sudo apt-get install nload -y ;
 sudo apt-get install nmon -y ;
 sudo apt-get install ntop -y ;
