@@ -373,6 +373,8 @@ class VideoLooper:
                 if event.key == pygame.K_k:
                     self._print("k was pressed. skipping...")
                     self._player.stop(3)
+                if event.key == pygame.K_b:
+                    self._do_button()
                 if event.key == pygame.K_s:
                     if self._playbackStopped:
                         self._print("s was pressed. starting...")
@@ -388,14 +390,17 @@ class VideoLooper:
     def _handle_sync_button(self):
         while True:
             self.sync_btn.wait_for_press()
-            if not self._firstSynced:
-                self._firstSynced = True
-            else:
-                self._queueNext = True
-            self._playbackStopped = False
-            self._player.stop(3)
+            self._do_button()
             self.sync_btn.wait_for_release()
             time.sleep(1)
+
+    def _do_button(self):
+        if not self._firstSynced:
+            self._firstSynced = True
+        else:
+            self._queueNext = True
+        self._playbackStopped = False
+        self._player.stop(3)
 
     def run(self):
         """Main program loop.  Will never return!"""
