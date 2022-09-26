@@ -98,10 +98,9 @@ class VideoLooper:
         self._small_font = pygame.font.Font(None, 50)
         self._big_font   = pygame.font.Font(None, 250)
         self._running    = True
-        self._playbackStopped = True
+        self._playbackStopped = False
         #used for not waiting the first time
         self._firstStart = True
-        self._firstSynced = False
         self._queueNext = False
 
         # start keyboard handler thread:
@@ -388,7 +387,6 @@ class VideoLooper:
     def _handle_sync_button(self):
         while True:
             self.sync_btn.wait_for_press()
-            self._firstSynced = True
             self._queueNext = True
             self._playbackStopped = False
             self._player.stop(3)
@@ -433,7 +431,7 @@ class VideoLooper:
 
             # Check for changes in the file search path (like USB drives added)
             # and rebuild the playlist.
-            if self._reader.is_changed() and (not self._playbackStopped or not self._firstSynced):
+            if self._reader.is_changed() and (not self._playbackStopped):
                 self._print("reader changed, stopping player")
                 self._player.stop(3)  # Up to 3 second delay waiting for old 
                                       # player to stop.
