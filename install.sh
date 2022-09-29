@@ -34,7 +34,7 @@ fi
 echo "Installing video_looper program..."
 echo "=================================="
 
-# change the directoy to the script location
+# change the directory to the script location
 cd "$(dirname "$0")"
 
 mkdir -p /mnt/usbdrive0 # This is very important if you put your system in readonly after
